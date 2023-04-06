@@ -9,6 +9,7 @@ const AddUser = (props) => {
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
   const [error, setError] = useState();
+  const [enteredCollegeName, setEnteredCollegeName] = useState("");
 
   const addUserHandler = (event) => {
     event.preventDefault();
@@ -26,13 +27,18 @@ const AddUser = (props) => {
       });
       return;
     }
-    props.onAddUser(enteredUsername, enteredAge);
+    props.onAddUser(enteredUsername, enteredCollegeName, enteredAge);
     setEnteredUsername("");
     setEnteredAge("");
+    setEnteredCollegeName("");
   };
 
   const usernameChangeHandler = (event) => {
     setEnteredUsername(event.target.value);
+  };
+
+  const collegeNameChangeHandler = (event) => {
+    setEnteredCollegeName(event.target.value);
   };
 
   const ageChangeHandler = (event) => {
@@ -60,6 +66,13 @@ const AddUser = (props) => {
             type="text"
             value={enteredUsername}
             onChange={usernameChangeHandler}
+          />
+          <label htmlFor="collegename">College Name</label>
+          <input
+            id="collegename"
+            type="text"
+            value={enteredCollegeName}
+            onChange={collegeNameChangeHandler}
           />
           <label htmlFor="age">Age (Years)</label>
           <input
