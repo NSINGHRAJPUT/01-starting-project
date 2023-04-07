@@ -8,16 +8,16 @@ const emailReducer = (state, action) => {
   if (action.type === "USER_INPUT") {
     return { value: action.value, isValid: action.value.includes("@") };
   }
-  if (action.type === "USER_BLUR") {
+  if (action.type === "INPUT_BLUR") {
     return { value: state.value, isValid: state.value.includes("@") };
   }
   return { value: "", isValid: false };
 };
 const passwordReducer = (state, action) => {
-  if (action.type === "USER_PASS") {
+  if (action.type === "USER_INPUT") {
     return { value: action.value, isValid: action.value.trim().length > 6 };
   }
-  if (action.type === "USER_B") {
+  if (action.type === "INPUT_BLUR") {
     return { value: state.value, isValid: state.value.trim().length > 6 };
   }
   return { value: "", isValid: false };
@@ -62,11 +62,11 @@ const Login = (props) => {
   const emailChangeHandler = (event) => {
     dispatchEmail({ type: "USER_INPUT", value: event.target.value });
 
-    setFormIsValid(event.target.value.includes("@"));
+    setFormIsValid(event.target.value.includes("@") && passwordState.isValid);
   };
 
   const passwordChangeHandler = (event) => {
-    dispatchPassword({ type: "USER_PASS", value: event.target.value });
+    dispatchPassword({ type: "USER_INPUT", value: event.target.value });
 
     setFormIsValid(
       emailState.value.includes("@") && passwordState.value.trim().length > 6
@@ -78,12 +78,12 @@ const Login = (props) => {
   };
 
   const validatePasswordHandler = () => {
-    dispatchPassword({ type: "INPUT_B" });
+    dispatchPassword({ type: "INPUT_BLUR" });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -105,7 +105,7 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordState === false ? classes.invalid : ""
+            passwordState.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
